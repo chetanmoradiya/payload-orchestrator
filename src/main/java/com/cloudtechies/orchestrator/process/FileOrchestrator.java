@@ -8,7 +8,8 @@ import org.apache.camel.Exchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -26,21 +27,31 @@ public class FileOrchestrator {
         Long lastModified = (Long) exchange.getIn().getHeader("CamelFileLastModified");
         String parentPath = (String) exchange.getIn().getHeader("CamelFileParent");
 
-        Payload payload = Payload.builder()
-                .createTs(LocalDateTime.now())
-                .payloadId(UUID.randomUUID())
-                .absolutePath(absolutePath)
-                .fileName(fileName)
-                .payloadState(PayloadState.POLLED)
-                .build();
+        Optional<Payload> oPayload = payloadRepository.findByFileNameAndLastModifiedTs(fileName,Instant.ofEpochMilli(lastModified));
 
-        /*
-        TODO
-        Apply Idempotency - if same name and last modified timestamp file comes again then do not create a new one but update the
-        existing one (if any) with status POLLED and update_ts = null
-         */
+        Payload payload;
+        if(oPayload.isPresent()){
+            log.info("existing payload found by name and last modified timestamp - will update the payload to POLLED");
+            payload = oPayload.get();
+            payload.setPayloadState(PayloadState.POLLED);
+            payload.setUpdateTs(Instant.now());
+            payload.setRespFileName(null);
+            payload.setInstructionCount(null);
+            payload.setRespFilePath(null);
+        }else{
+            payload = Payload.builder()
+                    .createTs(Instant.now())
+                    .payloadId(UUID.randomUUID())
+                    .absolutePath(absolutePath)
+                    .fileName(fileName)
+                    .lastModifiedTs(Instant.ofEpochMilli(lastModified))
+                    .payloadState(PayloadState.POLLED)
+                    .build();
+        }
+
         payloadRepository.save(payload);
-        log.info("Payload - {} created for file - {} with status POLLED",payload.getPayloadId(),absolutePath);
+
+        log.info("Payload - {} created/updated for file - {} with status POLLED",payload.getPayloadId(),absolutePath);
     }
 
 }

@@ -4,7 +4,7 @@ import com.cloudtechies.orchestrator.enums.PayloadState;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -29,10 +29,13 @@ public class Payload {
 
     @Id
     @Column(name="create_ts")
-    private LocalDateTime createTs;
+    private Instant createTs;
 
     @Column(name="update_ts")
-    private LocalDateTime updateTs;
+    private Instant updateTs;
+
+    @Column(name="last_modified_ts")
+    private Instant lastModifiedTs;
 
     @Column(name="instruction_count")
     private Long instructionCount;
