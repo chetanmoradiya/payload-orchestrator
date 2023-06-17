@@ -1,4 +1,4 @@
-package com.iris.hackathon.orchestrator;
+package com.cloudtechies.orchestrator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
