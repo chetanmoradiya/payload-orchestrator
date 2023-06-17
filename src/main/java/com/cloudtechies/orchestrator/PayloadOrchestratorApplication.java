@@ -1,9 +1,9 @@
-package com.iris.hackathon.orchestrator;
+package com.cloudtechies.orchestrator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.cloudtechies.orchestrator"})
 public class PayloadOrchestratorApplication {
 
 	public static void main(String[] args) {
