@@ -2,7 +2,9 @@ package com.cloudtechies.orchestrator.process;
 
 import com.cloudtechies.orchestrator.entity.Payload;
 import com.cloudtechies.orchestrator.enums.PayloadState;
+import com.cloudtechies.orchestrator.exception.ValidationException;
 import com.cloudtechies.orchestrator.repos.PayloadRepository;
+import com.cloudtechies.orchestrator.validation.FileValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +22,10 @@ public class FileOrchestrator {
 
     @Autowired
     PayloadRepository payloadRepository;
+
+    @Autowired
+    List<FileValidation> fileValidations;
+
 
     public void createPayload(Exchange exchange){
 
@@ -47,12 +54,24 @@ public class FileOrchestrator {
                     .fileName(fileName)
                     .lastModifiedTs(Instant.ofEpochMilli(lastModified))
                     .payloadState(PayloadState.TO_PROCESS)
+                    .rejectionReason(null)
                     .build();
+        }
+
+        try{
+            for(FileValidation validator : fileValidations){
+                validator.validate(new File(absolutePath));
+            }
+        }catch (ValidationException e){
+            log.error("Validation Error - {}",e.getMessage());
+            payload.setPayloadState(PayloadState.INVALID);
+            payload.setRejectionReason(e.getErrorDesc());
+            payload.setUpdateTs(Instant.now());
         }
 
         payloadRepository.save(payload);
 
-        log.info("Payload - {} created/updated for file - {} with status POLLED",payload.getPayloadId(),absolutePath);
+        log.info("Payload - {} created/updated for file - {} with status {}",payload.getPayloadId(),absolutePath,payload.getPayloadState());
     }
 
     private String updatePathForStaging(String parentPath, String fileName){

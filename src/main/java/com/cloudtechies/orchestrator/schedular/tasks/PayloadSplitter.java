@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
 
 @Component
@@ -19,6 +20,9 @@ public class PayloadSplitter {
     public void splitPayload(){
         log.info("Running...");
         List<Payload> eligiblePayloads = repository.findByPayloadStateOrderByUpdateTsDescCreateTsDesc(PayloadState.TO_PROCESS);
+        for(Payload pyd : eligiblePayloads){
+            File file = new File(pyd.getAbsolutePath());
+        }
         log.info("{} to process.",eligiblePayloads.size());
     }
 

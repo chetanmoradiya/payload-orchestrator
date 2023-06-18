@@ -50,4 +50,7 @@ public class Payload {
     @Column(name="payload_state")
     private PayloadState payloadState;
 
+    @Column(name="rejection_reason")
+    private String rejectionReason;
+
 }
