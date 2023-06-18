@@ -3,6 +3,7 @@ package com.cloudtechies.orchestrator.schedular.tasks;
 import com.cloudtechies.orchestrator.config.KafkaProps;
 import com.cloudtechies.orchestrator.entity.Payload;
 import com.cloudtechies.orchestrator.enums.PayloadState;
+import com.cloudtechies.orchestrator.exception.UnrecoverableException;
 import com.cloudtechies.orchestrator.kafka.KafkaOutputAdapter;
 import com.cloudtechies.orchestrator.repos.PayloadRepository;
 import com.cloudtechies.orchestrator.util.Jsonifier;
@@ -11,8 +12,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -31,8 +35,10 @@ public class PayloadSplitter {
 
     @Autowired
     KafkaProps kafkaProps;
-    
-    public void splitPayload() throws Exception{
+
+    @Transactional
+    @Retryable(value=UnrecoverableException.class, maxAttempts = Integer.MAX_VALUE, backoff=@Backoff(delay = 1000))
+    public void splitPayload() {
         log.info("Running...");
         List<Payload> eligiblePayloads = repository.findByPayloadStateOrderByUpdateTsDescCreateTsDesc(PayloadState.TO_PROCESS);
         for(Payload pyd : eligiblePayloads){
@@ -42,7 +48,7 @@ public class PayloadSplitter {
         log.info("{} to process.",eligiblePayloads.size());
     }
 
-    private void splitAndJsonifyAndSendForward(File file, Payload pyd){
+    private void splitAndJsonifyAndSendForward(File file, Payload pyd) throws UnrecoverableException{
 
         String headerLine = "";
         Long noOfTxns = 0L;
@@ -61,6 +67,7 @@ public class PayloadSplitter {
             }
         }catch (Exception e){
             log.error("Exception - {}",e.getMessage());
+            throw new UnrecoverableException("SPLITERR",e.getMessage());
         }
 
         updatePayload(pyd, PayloadState.IN_PROCESS,noOfTxns);
