@@ -12,3 +12,7 @@ filepoller:
   regex: .*\.csv
   ingestionDir: /anand/temp/mnt/ingestion
   delay: 3s
+
+kafka:
+  clusterUrl: localhost:9092
+  outputTopic: txn-data-input

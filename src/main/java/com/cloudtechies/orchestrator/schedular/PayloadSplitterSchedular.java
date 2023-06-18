@@ -14,7 +14,7 @@ public class PayloadSplitterSchedular {
     PayloadSplitter splitter;
 
     @Scheduled(fixedRate = 5000)
-    public void runPayloadSplitter(){
+    public void runPayloadSplitter() throws Exception{
         splitter.splitPayload();
     }
     
