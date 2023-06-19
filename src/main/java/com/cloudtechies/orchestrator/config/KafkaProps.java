@@ -15,4 +15,6 @@ public class KafkaProps {
 
     private String outputTopic;
 
+    private String respTopic;
+
 }

@@ -1,6 +1,8 @@
 package com.cloudtechies.orchestrator.entity;
 
 import com.cloudtechies.orchestrator.enums.PayloadState;
+import com.cloudtechies.orchestrator.util.InstantToEpochMilliConverter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,17 +26,23 @@ public class Payload {
     @Column(name="file_name")
     private String fileName;
 
+    @Column(name="ftp_folder")
+    private String ftpFolder;
+
     @Column(name="absolute_path")
     private String absolutePath;
 
     @Id
     @Column(name="create_ts")
+    @JsonSerialize(converter = InstantToEpochMilliConverter.class)
     private Instant createTs;
 
     @Column(name="update_ts")
+    @JsonSerialize(converter = InstantToEpochMilliConverter.class)
     private Instant updateTs;
 
     @Column(name="last_modified_ts")
+    @JsonSerialize(converter = InstantToEpochMilliConverter.class)
     private Instant lastModifiedTs;
 
     @Column(name="instruction_count")

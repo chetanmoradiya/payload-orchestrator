@@ -19,8 +19,8 @@ import java.util.UUID;
 public class TransactionReport {
 
     @Id
-    @Column(name="instruction_id",columnDefinition = "UUID")
-    private UUID instructionId;
+    @Column(name="txn_report_id",columnDefinition = "UUID")
+    private UUID transactionReportId;
 
     @Column(name="payload_id",columnDefinition = "UUID")
     private UUID payloadId;

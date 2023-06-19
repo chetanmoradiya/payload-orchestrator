@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,8 @@ public class FileOrchestrator {
         Long lastModified = (Long) exchange.getIn().getHeader("CamelFileLastModified");
         String parentPath = (String) exchange.getIn().getHeader("CamelFileParent");
 
+        String ingestionFolder = extractIngestionFolderFromFilePath(new File(absolutePath).toPath());
+
         Optional<Payload> oPayload = payloadRepository.findByFileNameAndLastModifiedTs(fileName,Instant.ofEpochMilli(lastModified));
 
         Payload payload;
@@ -55,6 +58,7 @@ public class FileOrchestrator {
                     .lastModifiedTs(Instant.ofEpochMilli(lastModified))
                     .payloadState(PayloadState.TO_PROCESS)
                     .rejectionReason(null)
+                    .ftpFolder(ingestionFolder)
                     .build();
         }
 
@@ -76,6 +80,10 @@ public class FileOrchestrator {
 
     private String updatePathForStaging(String parentPath, String fileName){
         return parentPath+ File.separator+".staging"+File.separator+fileName;
+    }
+
+    private String extractIngestionFolderFromFilePath(Path filePath){
+        return filePath.getName(filePath.getNameCount() - 2).toString();
     }
 
 }

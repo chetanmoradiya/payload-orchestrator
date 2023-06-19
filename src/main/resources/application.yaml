@@ -16,3 +16,4 @@ filepoller:
 kafka:
   clusterUrl: localhost:9092
   outputTopic: txn-data-input
+  respTopic: client-resp-queue

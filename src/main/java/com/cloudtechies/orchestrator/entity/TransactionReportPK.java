@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TransactionReportPK implements Serializable {
 
-    private UUID instructionId;
+    private UUID transactionReportId;
 
     private Instant createTs;
 
