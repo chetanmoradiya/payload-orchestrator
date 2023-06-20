@@ -33,7 +33,7 @@ public class LoadSimulator {
         for(int i=1;i<=noOfFiles;i++){
             String fileToWrite = fileNamePrefix+i+fileNameSuffix;
             String client = getRandomFromList(clients);
-            String filePath = rootPath+File.separator+fileToWrite;
+            String filePath = rootPath+File.separator+client+File.separator+fileToWrite;
             FileWriter fw = new FileWriter(filePath,true);
             fw.write(fileHeader);
             fw.write("\n");
