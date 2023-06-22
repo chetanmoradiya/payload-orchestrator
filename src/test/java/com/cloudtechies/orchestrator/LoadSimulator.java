@@ -26,7 +26,7 @@ public class LoadSimulator {
         String fileNamePrefix = "TradeData_000";
         String fileNameSuffix = ".csv";
 
-        Long noOfFiles = 20L;
+        Long noOfFiles = 1L;
         List<Long> noOfRowsPerFileOptions= Arrays.asList(500L,1000L) ;
         int delayBetweenFiles = 10;
 
