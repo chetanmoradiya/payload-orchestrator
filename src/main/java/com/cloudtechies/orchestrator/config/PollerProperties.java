@@ -18,4 +18,6 @@ public class PollerProperties {
 
     private String delay;
 
+    boolean skipMsgToKafka;
+
 }

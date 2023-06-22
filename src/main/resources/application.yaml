@@ -12,6 +12,7 @@ filepoller:
   regex: .*\.csv
   ingestionDir: /anand/temp/mnt/ingestion
   delay: 3s
+  skipMsgToKafka: false
 
 kafka:
   clusterUrl: localhost:9092
@@ -19,5 +20,5 @@ kafka:
   respTopic: client-resp-queue
 
 simulator:
-  enable: false
+  enabled: false
   interval: 5000

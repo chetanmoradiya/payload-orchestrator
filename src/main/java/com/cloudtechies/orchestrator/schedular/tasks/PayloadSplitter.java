@@ -1,6 +1,7 @@
 package com.cloudtechies.orchestrator.schedular.tasks;
 
 import com.cloudtechies.orchestrator.config.KafkaProps;
+import com.cloudtechies.orchestrator.config.PollerProperties;
 import com.cloudtechies.orchestrator.entity.Payload;
 import com.cloudtechies.orchestrator.enums.PayloadState;
 import com.cloudtechies.orchestrator.exception.UnrecoverableException;
@@ -36,6 +37,9 @@ public class PayloadSplitter {
     @Autowired
     KafkaProps kafkaProps;
 
+    @Autowired
+    PollerProperties pollerProperties;
+
     @Transactional
     @Retryable(value=UnrecoverableException.class, maxAttempts = Integer.MAX_VALUE, backoff=@Backoff(delay = 1000))
     public void splitPayload() {
@@ -60,9 +64,11 @@ public class PayloadSplitter {
                     headerLine = String.join(",",csvRecord.values());
                 } else {
                     String msgToSend = Jsonifier.jsonify(String.join(",",csvRecord.values()),headerLine,",");
-                    kafkaOutputAdapter.sendMsgToKafka(msgToSend, kafkaProps.getOutputTopic());
+                    if(!pollerProperties.isSkipMsgToKafka()){
+                        kafkaOutputAdapter.sendMsgToKafka(msgToSend, kafkaProps.getOutputTopic());
+                    }
                     noOfTxns++;
-                    log.info("Sent message to kafka.");
+                    log.info("Sent message - {} to kafka.",noOfTxns);
                 }
             }
         }catch (Exception e){
