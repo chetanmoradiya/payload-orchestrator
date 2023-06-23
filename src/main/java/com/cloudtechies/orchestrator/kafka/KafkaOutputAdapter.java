@@ -11,7 +11,10 @@ public class KafkaOutputAdapter {
     @Autowired
     KafkaProducer kafkaProducer;
 
-    public void sendMsgToKafka(String msg, String topic){
-        kafkaProducer.send(topic,msg,"key",new HashMap<>());
+    public void sendMsgToKafka(String msg, String topic, String payloadId, Long payloadTs){
+        HashMap<String, Object> headerMap = new HashMap<>();
+        headerMap.put("PAYLOAD_ID",payloadId);
+        headerMap.put("PAYLOAD_TS", payloadTs);
+        kafkaProducer.send(topic,msg,"key",headerMap);
     }
 }

@@ -50,7 +50,7 @@ public class RespOrchestrator {
             }catch (JsonProcessingException e){
                 throw new UnrecoverableException("JSONPROCESS",e.getMessage());
             }
-            kafkaOutputAdapter.sendMsgToKafka(kafkaMsg,kafkaProps.getRespTopic());
+            kafkaOutputAdapter.sendMsgToKafka(kafkaMsg,kafkaProps.getRespTopic(),p.getPayloadId().toString(),p.getCreateTs().toEpochMilli());
         }
     }
 

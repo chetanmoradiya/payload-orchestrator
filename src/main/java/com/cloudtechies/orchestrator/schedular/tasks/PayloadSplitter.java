@@ -65,7 +65,10 @@ public class PayloadSplitter {
                 } else {
                     String msgToSend = Jsonifier.jsonify(String.join(",",csvRecord.values()),headerLine,",");
                     if(!pollerProperties.isSkipMsgToKafka()){
-                        kafkaOutputAdapter.sendMsgToKafka(msgToSend, kafkaProps.getOutputTopic());
+                        kafkaOutputAdapter.sendMsgToKafka(msgToSend,
+                                kafkaProps.getOutputTopic(),
+                                pyd.getPayloadId().toString(),
+                                pyd.getCreateTs().toEpochMilli());
                     }
                     noOfTxns++;
                     log.info("Sent message - {} to kafka.",noOfTxns);
