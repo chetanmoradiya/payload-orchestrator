@@ -38,7 +38,7 @@ public class LoadSimulator {
 
         String fileNamePrefix = UUID.randomUUID().toString();
         String tmp = ".tmp";
-        List<Long> noOfRowsPerFileOptions= Arrays.asList(1L) ;
+        List<Long> noOfRowsPerFileOptions= Arrays.asList(1L,2L,3L,4L,5L) ;
 
             String fileToWrite = fileNamePrefix;
             String client = getRandomFromList(clients);
