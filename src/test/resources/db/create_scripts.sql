@@ -1,6 +1,7 @@
 create schema if not exists cloudtechies;
 
 drop table if exists payload;
+drop table if exists transaction_report;
 
 CREATE TABLE if not exists payload(
     payload_id UUID not NULL,
@@ -29,7 +30,7 @@ CREATE TABLE if not exists transaction_report(
 	cntrct_type varchar(100),
 	action_type varchar(100),
 	uti varchar(100),
-	'level' varchar(100),
+	level varchar(100),
     rep_ctrpty_cd varchar(20),
  	rep_ctrpty_fin_sts varchar(100),
 	rep_ctrpty_sec varchar(100),
