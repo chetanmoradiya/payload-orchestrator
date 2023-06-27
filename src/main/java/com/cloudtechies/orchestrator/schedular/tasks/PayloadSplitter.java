@@ -71,9 +71,10 @@ public class PayloadSplitter {
                                 pyd.getCreateTs().toEpochMilli());
                     }
                     noOfTxns++;
-                    log.info("Sent message - {} to kafka.",noOfTxns);
+                    //log.info("Sent message - {} to kafka.",noOfTxns);
                 }
             }
+            log.info("Sent all message to kafka - {} ",pyd.getPayloadId());
         }catch (Exception e){
             log.error("Exception - {}",e.getMessage());
             throw new UnrecoverableException("SPLITERR",e.getMessage());

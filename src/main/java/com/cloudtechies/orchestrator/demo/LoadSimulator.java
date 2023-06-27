@@ -30,15 +30,15 @@ public class LoadSimulator {
         List<String> clients = Arrays.asList(rootDir.list());
         String fileHeader = "Transaction ID, Contract Type,Action type,UTI,Level,Reporting Counterparty Code,Reporting Counterparty Financial Status,Reporting Counterparty Sector,Non-Reporting Counterparty Code, Non-Reporting Counterparty Financial Status, Non-Reporting Counterparty Sector, Counterparty Side, Event date, Trading venue,Master agreement type, Value date, General collateral Indicator, Type of asset, Security identifier, Classification of a security, Loan Base product, Loan Sub product, Loan Further sub product,Loan LEI of the issuer, Loan Maturity of the security, Loan Jurisdiction of the issuer";
         List<String> rowsOption  = Arrays.asList(
-                "@@_rn_@@,SLEB,NEWT,UTI456@@uti@@,TCTN,ABNJKHJNMJHBNVB@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ13,F,,TAKE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,TRNDXX,LBPS,LSPS,LFSP,ABNJKHJNMJHBNVBNHJ12,2015-10-23,US",
-                "@@_rn_@@,SLEB,NEWT,UTI457@@uti@@,TCTN,ABNJKHJNMJHBNVB@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ12,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,TRNDXX,LBPS,LSPS,LFSP,ABNJKHJNMJHBNVBNHJ12,2015-10-23,US",
-                "@@_rn_@@,SLEB,NEWT,UTI459@@uti@@,TCTN,ABNJKHJNMJHBNVB@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ15,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,,,LSPS,LFSP,,,",
-                "@@_rn_@@,SLEB,NEWT,UTI458@@uti@@,TCTN,ABNJKHJNMJHBNVB@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ15,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,,,,,,,"
+                "@@_rn_@@,SLEB,NEWT,UTI456@@uti@@,TCTN,ABNJKHJNMJ@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ13,F,,TAKE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,TRNDXX,LBPS,LSPS,LFSP,ABNJKHJNMJHBNVBNHJ12,2015-10-23,US",
+                "@@_rn_@@,SLEB,NEWT,UTI457@@uti@@,TCTN,ABNJKHJNMJ@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ12,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,TRNDXX,LBPS,LSPS,LFSP,ABNJKHJNMJHBNVBNHJ12,2015-10-23,US",
+                "@@_rn_@@,SLEB,NEWT,UTI459@@uti@@,TCTN,ABNJKHJNMJ@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ15,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,,,LSPS,LFSP,,,",
+                "@@_rn_@@,SLEB,NEWT,UTI458@@uti@@,TCTN,ABNJKHJNM@@rccd@@,F,ETFT,ABNJKHJNMJHBNVBNHJ15,F,,GIVE,2015-10-23,M001,OTHR,2015-10-23,SPEC,SECU,ABCDEFGHIJ12,,,,,,,"
         );
 
         String fileNamePrefix = UUID.randomUUID().toString();
         String tmp = ".tmp";
-        List<Long> noOfRowsPerFileOptions= Arrays.asList(1L,2L,3L,4L,5L) ;
+        List<Long> noOfRowsPerFileOptions= Arrays.asList(1000L) ;
 
             String fileToWrite = fileNamePrefix;
             String client = getRandomFromList(clients);
@@ -58,7 +58,7 @@ public class LoadSimulator {
                 String row = getRandomFromList(rowsOption);
                 row = row.replace("@@_rn_@@",String.valueOf(j));
                 row = row.replace("@@uti@@",String.valueOf(j));
-                row = row.replace("@@rccd@@",String.valueOf(j));
+                row = row.replace("@@rccd@@",getFieldSuffix(j,"%010d"));
                 fw.write(row+"\n");
                 if(j%10==0){
                     fw.flush();
@@ -69,6 +69,11 @@ public class LoadSimulator {
             File finalFile = new File(filePath+".csv");
             tmpFile.renameTo(finalFile);
     }
+
+    private String getFieldSuffix(int counter, String pattern) {
+        return String.format(pattern, counter);
+    }
+
 
     private String getRandomFromList(List<String> list){
         Random rand = new Random();

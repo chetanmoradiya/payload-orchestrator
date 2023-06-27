@@ -3,10 +3,10 @@ spring:
     username: postgres
     url: jdbc:postgresql://localhost:5432/hackathon
     password: postgres
-#    hikari:
-#      schema: cloudtechies
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 filepoller:
   regex: .*\.csv
@@ -20,5 +20,5 @@ kafka:
   respTopic: client-resp-queue
 
 simulator:
-  enabled: false
+  enabled: true
   interval: 5000

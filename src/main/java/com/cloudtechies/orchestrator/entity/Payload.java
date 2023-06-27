@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
+@Entity(name="payload")
 @Getter
 @Setter
 @Table(name="payload")

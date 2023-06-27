@@ -1,8 +1,4 @@
-create schema if not exists cloudtechies;
-
 drop table if exists payload;
-drop table if exists transaction_report;
-
 CREATE TABLE if not exists payload(
     payload_id UUID not NULL,
     file_name VARCHAR (100) NOT NULL,
@@ -19,6 +15,10 @@ CREATE TABLE if not exists payload(
     constraint payload_pk primary key (payload_id,create_ts)
 );
 
+CREATE INDEX IF NOT EXISTS payload_i1 ON payload(file_name,last_modified_ts);
+CREATE INDEX IF NOT EXISTS payload_i2 ON payload(update_ts,create_ts);
+
+drop table if exists transaction_report;
 CREATE TABLE if not exists transaction_report(
  	txn_report_id UUID not null,
 	payload_id UUID not null,
@@ -54,3 +54,23 @@ CREATE TABLE if not exists transaction_report(
     loan_juris_of_issuer varchar(100),
     constraint transaction_report_pk primary key (txn_report_id, create_ts)
 );
+
+CREATE INDEX IF NOT EXISTS transaction_report_i1 ON transaction_report(payload_id,txn_status);
+CREATE INDEX IF NOT EXISTS transaction_report_i2 ON transaction_report(payload_id,trn_id);
+CREATE INDEX IF NOT EXISTS transaction_report_i3 ON transaction_report(txn_status,create_ts);
+CREATE INDEX IF NOT EXISTS transaction_report_i4 ON transaction_report(payload_id);
+
+drop table if exists instrument_data;
+CREATE TABLE if not exists instrument_data(
+    sec_identifier VARCHAR (50) NOT NULL,
+    typ_of_asset VARCHAR (50),
+    class_of_a_sec VARCHAR(50),
+    loan_base_prod VARCHAR(50),
+    loan_sub_prod VARCHAR (50),
+    loan_fur_sub_prod VARCHAR (50),
+    loan_lei_of_issuer VARCHAR (50),
+    loan_maturity_of_secu VARCHAR (50),
+    loan_juris_of_issuer VARCHAR (50),
+    constraint sec_identifier_pk primary key (sec_identifier)
+);
+

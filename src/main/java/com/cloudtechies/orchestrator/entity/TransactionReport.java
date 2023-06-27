@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
+@Entity(name="transaction_report")
 @Getter
 @Setter
 @Table(name="transaction_report")
