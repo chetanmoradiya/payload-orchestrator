@@ -22,7 +22,7 @@ public class RespCreationSchedular {
     @Autowired
     PayloadRepository payloadRepository;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 2000)
     public void runPayloadSplitter(){
 
         List<Payload> inProcessPayloads = payloadRepository.findByPayloadStateOrderByUpdateTsDescCreateTsDesc(PayloadState.IN_PROCESS);

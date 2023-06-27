@@ -13,7 +13,7 @@ public class PayloadSplitterSchedular {
     @Autowired
     PayloadSplitter splitter;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 2000)
     public void runPayloadSplitter(){
         splitter.splitPayload();
     }

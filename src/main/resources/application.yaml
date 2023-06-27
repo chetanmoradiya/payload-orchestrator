@@ -20,5 +20,5 @@ kafka:
   respTopic: client-resp-queue
 
 simulator:
-  enabled: true
+  enabled: false
   interval: 5000

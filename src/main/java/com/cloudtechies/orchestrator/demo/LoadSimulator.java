@@ -22,7 +22,7 @@ public class LoadSimulator {
     @Value("${filepoller.ingestionDir}")
     String ingestionDir;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 2000)
     void runLoadTest() throws IOException,InterruptedException {
 
         String rootPath = ingestionDir;

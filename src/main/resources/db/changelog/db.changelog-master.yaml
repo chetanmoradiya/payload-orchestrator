@@ -1,12 +1,12 @@
-#databaseChangeLog:
-#  - include:
-#      id: changelog-1
-#      author: cloudtechies
-#      file: sql/create-statment-orchestrator.sql
-#      relativeToChangelogFile: true
-#
-#  - include:
-#      id: changelog-2
-#      author: cloudtechies
-#      file: sql/load-statment-orchestrator.sql
-#      relativeToChangelogFile: true
+databaseChangeLog:
+  - include:
+      id: changelog-1
+      author: cloudtechies
+      file: sql/create-statment-orchestrator.sql
+      relativeToChangelogFile: true
+
+  - include:
+      id: changelog-2
+      author: cloudtechies
+      file: sql/load-statment-orchestrator.sql
+      relativeToChangelogFile: true
