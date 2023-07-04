@@ -22,7 +22,7 @@ public class LoadSimulator {
     @Value("${filepoller.ingestionDir}")
     String ingestionDir;
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 3000)
     void runLoadTest() throws IOException,InterruptedException {
 
         String rootPath = ingestionDir;
@@ -38,7 +38,7 @@ public class LoadSimulator {
 
         String fileNamePrefix = UUID.randomUUID().toString();
         String tmp = ".tmp";
-        List<Long> noOfRowsPerFileOptions= Arrays.asList(1000L) ;
+        List<Long> noOfRowsPerFileOptions= Arrays.asList(10000L) ;
 
             String fileToWrite = fileNamePrefix;
             String client = getRandomFromList(clients);
